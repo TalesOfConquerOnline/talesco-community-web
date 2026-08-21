@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DB_LOGO_URL } from '../config/assets';
+import { DISCORD_URL } from '../config/consts';
 
 const Image = styled('img')(({ theme }) => ({
   height: 56,
@@ -26,7 +27,8 @@ const Image = styled('img')(({ theme }) => ({
 
 const tabs = [
   { label: 'Wiki', path: '/wiki' },
-  { label: 'Market', path: '/market' }
+  { label: 'Market', path: '/market' },
+  { label: 'Discord', path: DISCORD_URL, external: true }
 ];
 
 export default function AppBar() {
@@ -61,7 +63,13 @@ export default function AppBar() {
 
           <Tabs
             value={activeTab}
-            onChange={(_, path: string) => navigate(path)}
+            onChange={(_, path: string) => {
+              if (tabs.find((tab) => tab.path === path)?.external) {
+                window.open(path, '_blank', 'noopener');
+              } else {
+                navigate(path);
+              }
+            }}
             textColor="inherit"
             indicatorColor="secondary"
             sx={{ color: 'white' }}
